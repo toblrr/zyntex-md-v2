@@ -33,13 +33,6 @@ if (
 }
 var ownerNumber = process.env.OWNER_NUMBER;
 
-if (fs.existsSync("./Zynt3x.mp4")) {
-  fs.unlinkSync("./Zynt3x.mp4");
-}
-if (fs.existsSync("./Zynt3x.mp3")) {
-  fs.unlinkSync("./Zynt3x.mp3");
-}
-
 figlet.text(
   "ZYNTEX-MD",
   {
@@ -89,7 +82,7 @@ async function zyntex() {
 
   const zyn = makeWASocket({
     logger: pino({ level: "silent" }),
-    printQRInTerminal: false,
+    printQRInTerminal: true,
     markOnlineOnConnect: false,
     auth: state,
   });
@@ -158,14 +151,13 @@ async function zyntex() {
     }
   });
 
-  // const commandsPath = path.join(__dirname, "/core/commands");
-
-  // // fs.readdirSync(commandsPath).forEach((file) => {
-  // //   const fullPath = path.join(commandsPath, file);
-  // //   if (file.endsWith(".js")) {
-  // //     require(fullPath);
-  // //   }
-  // // });
+  const commandsPath = path.join(__dirname, "/core/commands");
+    fs.readdirSync(commandsPath).forEach((file) => {
+    const fullPath = path.join(commandsPath, file);
+    if (file.endsWith(".js")) {
+      require(fullPath);
+    }
+  });
   const pluginDir = path.join(__dirname, "/core/plugins");
   fs.readdirSync(pluginDir).forEach((file) => {
     if (file.endsWith(".js")) {
