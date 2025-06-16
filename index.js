@@ -170,6 +170,7 @@ async function zyntex() {
   fs.readdirSync(pluginDir).forEach((file) => {
     if (file.endsWith(".js")) {
       require(path.join(pluginDir, file));
+
     }
   });
 
