@@ -1,4 +1,3 @@
 core/scraper/
-node_modules/
 yarn.lock
 .vscode/
