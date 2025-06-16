@@ -158,14 +158,14 @@ async function zyntex() {
     }
   });
 
-  const commandsPath = path.join(__dirname, "/core/commands");
+  // const commandsPath = path.join(__dirname, "/core/commands");
 
-  fs.readdirSync(commandsPath).forEach((file) => {
-    const fullPath = path.join(commandsPath, file);
-    if (file.endsWith(".js")) {
-      require(fullPath);
-    }
-  });
+  // // fs.readdirSync(commandsPath).forEach((file) => {
+  // //   const fullPath = path.join(commandsPath, file);
+  // //   if (file.endsWith(".js")) {
+  // //     require(fullPath);
+  // //   }
+  // // });
   const pluginDir = path.join(__dirname, "/core/plugins");
   fs.readdirSync(pluginDir).forEach((file) => {
     if (file.endsWith(".js")) {
