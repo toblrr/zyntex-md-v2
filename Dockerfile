@@ -8,15 +8,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies defined in package.json
-RUN npm install && npm audit fix --omit=dev
+RUN npm install
 
 # Copy the rest of your application code
 COPY . .
 
 # Expose port 3000 (or your application's port)
 EXPOSE 3000
-
-RUN ls -l /app
 
 # Define the command to run the application
 CMD ["node", "index.js"]
