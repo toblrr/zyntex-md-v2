@@ -35,7 +35,7 @@ async function messageHandler(zyn, m) {
   const context = buildContext(zyn, q, id, prefix);
 
   try {
-    await commandObj.handler(zyn, id, pushName, args, context);
+    await commandObj.handler(zyn, id, pushName, args, context, m);
   } catch (err) {
     console.error("❌ Command Error:", err);
     await zyn.sendMessage(

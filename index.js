@@ -1,24 +1,9 @@
 const {
   default: makeWASocket,
-  AnyMessageContent,
-  delay,
   DisconnectReason,
   fetchLatestBaileysVersion,
-  getAggregateVotesInPollMessage,
-  downloadMediaMessage,
-  makeCacheableSignalKeyStore,
-  makeInMemoryStore,
-  PHONENUMBER_MCC,
-  proto,
   useMultiFileAuthState,
-  WAMessageContent,
-  WAMessageKey,
-  Mimetype,
-  MessageType,
-  MessageOptions,
-  jidNormalizedUser,
   requestPairingCode,
-  BufferJSON,
 } = require("baileys");
 let { Boom } = require("@hapi/boom");
 const fs = require("fs");
@@ -104,7 +89,7 @@ async function zyntex() {
 
   const zyn = makeWASocket({
     logger: pino({ level: "silent" }),
-    printQRInTerminal: true,
+    printQRInTerminal: false,
     markOnlineOnConnect: false,
     auth: state,
   });
@@ -181,201 +166,16 @@ async function zyntex() {
       require(fullPath);
     }
   });
-
-  // const commandPath = path.join(__dirname, '/core/commands');
-  // fs.readdirSync(commandPath).forEach(file => {
-  //   if (file.endsWith('.js')) {
-  //       require(path.join(commandPath, file));
-  //   }
-  // });
-
   const pluginDir = path.join(__dirname, "/core/plugins");
   fs.readdirSync(pluginDir).forEach((file) => {
     if (file.endsWith(".js")) {
       require(path.join(pluginDir, file));
-      console.log(c.green("Plugins Installed."));
     }
   });
 
   zyn.ev.on("messages.upsert", async (m) => {
     await messageHandler(zyn, m);
   });
-
-  // zyn.ev.on("messages.upsert", async (m) => {
-  //   const { messages } = m;
-  //   const q = messages[0];
-  //   if (!q.message) return;
-
-  //   const userName = messages[0].pushName;
-
-  //   const messageTypes = Object.keys(q?.message);
-
-  //   const messageType = messageTypes[0];
-
-  //   // console.log(m.messages[0].message.videoMessage.thumbnailDirectPath)
-
-  //   const id = m.messages[0].key.remoteJid;
-  //   const key = m.messages[0].key;
-
-  //   let i = {
-  //     remoteJid: q.key.remoteJid,
-  //     id: q.key.id,
-  //   };
-
-  //   let body = "";
-  //   if (messageType === "conversation" && m.type === "notify") {
-  //     var grpMsg = q.message.conversation;
-  //     body = grpMsg;
-  //   } else if (messageType === "extendedTextMessage" && m.type === "notify") {
-  //     var dmMsg = q.message.extendedTextMessage.text;
-  //     body = dmMsg;
-  //   }
-  //   if (messageType === "imageMessage" && m.type === "notify") {
-  //     var img_url = m.messages[0].message?.imageMessage?.url;
-  //     var img_cap = m.messages[0].message?.imageMessage?.caption;
-  //   }
-  //   if (messageType === "videoMessage" && m.type === "notify") {
-  //     var vid_url = m.messages[0].message?.videoMessage?.url;
-  //     var vid_cap = m.messages[0].message?.videoMessage?.caption;
-
-  //     console.log(vid_cap, vid_url);
-  //   }
-
-  //   // if (messageType === "imageMessage" && m.type === "notify") {
-  //   //   var imgMsg = q.message.imageMessage.url;
-  //   //   var imgMsgCaption = q.message.imageMessage.caption;
-  //   // }
-  //   // if (messageType === "audioMessage" && m.type === "notify") {
-  //   //   var audMsg = q.message.audioMessage.url;
-  //   // }
-  //   // if (messageType === "videoMessage" && m.type === "notify") {
-  //   //   var vidMsg = q.message.videoMessage.url;
-  //   //   var vidMsgCaption = q.message.videoMessage.caption;
-  //   // }
-
-  //   const reply = async (msg) => {
-  //     await zyn.sendMessage(id, { text: msg }, { quoted: q });
-  //   };
-
-  //   const sendVideo = async (path, cap) => {
-  //     await zyn.sendMessage(
-  //       id,
-  //       { video: { url: path }, mimetype: "video/mp4", caption: cap },
-  //       { quoted: q }
-  //     );
-  //   };
-  //   const sendImage = async (path, cap) => {
-  //     await zyn.sendMessage(
-  //       id,
-  //       { image: { url: path }, caption: cap },
-  //       { quoted: q }
-  //     );
-  //   };
-  //   const sendAudio = async (path) => {
-  //     await zyn.sendMessage(
-  //       id,
-  //       { audio: { url: path }, mimetype: "audio/mp4" },
-  //       { quoted: q }
-  //     );
-  //   };
-  //   const sendAudioV2 = async (path, title, body, thumb, mediaType, url) => {
-  //     await zyn.sendMessage(
-  //       id,
-  //       {
-  //         audio: { url: path },
-  //         mimetype: "audio/mp4",
-  //         contextInfo: {
-  //           externalAdReply: {
-  //             title: title,
-  //             body: body,
-  //             thumbnailUrl: thumb,
-  //             mediaType: mediaType,
-  //             showAdAttribution: true,
-  //             renderLargerThumbnail: false,
-  //             sourceUrl: url,
-  //           },
-  //         },
-  //       },
-  //       { quoted: q }
-  //     );
-  //   };
-  //   const sendVoice = async (path) => {
-  //     await zyn.sendMessage(
-  //       id,
-  //       {
-  //         audio: { url: path },
-  //         mimetype: "audio/mp4",
-  //         ptt: true,
-  //         waveform: [0, 100, 0, 100, 0],
-  //       },
-  //       { quoted: q }
-  //     );
-  //   };
-  //   const message = (msg) => {
-  //     zyn.sendMessage(id, { text: msg });
-  //   };
-
-  //   const read = () => {
-  //     zyn.readMessages([q.key]);
-  //   };
-
-  //   const type = () => {
-  //     zyn.sendPresenceUpdate("composing", id);
-  //     delay(1000);
-  //   };
-
-  //   const record = () => {
-  //     zyn.sendPresenceUpdate("recording", id);
-  //     delay(1000);
-  //   };
-
-  //   const errorMsg = (query, command, example) => {
-  //     reply(
-  //       "_*" +
-  //         query +
-  //         "*_\n\n```ex:  " +
-  //         prefix +
-  //         command +
-  //         " <" +
-  //         example +
-  //         ">```"
-  //     );
-  //   };
-
-  //   const react = (emoji) => {
-  //     zyn.sendMessage(id, { react: { text: emoji, key: q.key } });
-  //   };
-
-  //   //messaging!
-  //   if (body === prefix + "alive") {
-  //     read(), type(), react("🪼");
-
-  //     const msg = `*Hey! ${userName}* \n*I'm Alive...*`;
-  //     sendVoice(randomBgm);
-  //     sendImage(randomAliveImages, msg);
-  //   }
-
-  //   /* if (body === prefix + "ping") {
-  //       read(), type(), react("📍");
-  //       try{
-  //         await fetch('www.google.com')
-  //         reply(' ```Pin')
-  //       }catch(err){
-  //         reply("*An Error Occured!*\n" + `_*${err}*_`);
-  //       }
-  //     }
-  //     */
-
-  //   // if (body === prefix + "quote") {
-  //   //   read(), type(), react("📜");
-  //   //   try{
-  //   //     quote().then((res) => {
-  //   //       reply(res[0].r)
-  //   //     })
-  //   //   }catch(err){
-  //   //     reply("*An Error Occured!*\n" + `_*${err}*_`);
-  //   //   }
-  //   // }
 
   //   if (body.startsWith(prefix + "ytv")) {
   //     read(), type(), react("🎥");
@@ -441,178 +241,8 @@ async function zyntex() {
   //     }
   //   }
 
-  //   if (body.startsWith(prefix + "song")) {
-  //     read(), type(), react("🎵");
-  //     const query = body.slice(5);
 
-  //     if (!query || body.includes("https://youtube.com/watch?v=")) {
-  //       errorMsg("Need a Query!", "song", "Query");
-  //     } else {
-  //       try {
-  //         const agent = ytdl.createAgent(JSON.parse(fs.readFileSync('./cookies/ytdl.json')))
-  //         yts(query).then((res) => {
-  //           const videos = res.videos.slice(0, 3);
-  //           const url = videos[0].url;
-  //           const r = res.all[0].thumbnail;
-  //           ytdl.getInfo(url , {agent}).then((res) => {
-  //             const videoTitle = res.videoDetails.title;
-  //             reply("_*Downloading...*_\n" + "_" + videoTitle + "_")
-  //             const filtered = res.formats.filter(item => item.mimeType && item.mimeType.includes('audio') && item.audioQuality === 'AUDIO_QUALITY_LOW')
-  //             const size = bitrateToMB(filtered[0].audioBitrate , filtered[0].approxDurationMs)
-  //             if(size.toFixed(2) >= 100){
-  //               reply('*Size exceeded 100MB*')
-  //             }else{
-  //               sendAudioV2(filtered[0].url, videoTitle, botName, r, 1, res.videoDetails.video_url)
-  //             }
-
-  //             // let stream = ytdl(url, {
-  //             //   quality: "lowestaudio",
-  //             // });
-
-              // const fileName = "./Zynt3x.mp3";
-
-              // stream.pipe(fs.createWriteStream(fileName));
-
-  //             // stream.on("finish", () => {
-  //             //   sendAudioV2(
-  //             //     fileName,
-  //             //     videoTitle,
-  //             //     botName,
-  //             //     r,
-  //             //     1,
-  //             //     res.videoDetails.video_url
-  //             //   );
-  //             //   return 0;
-
-  //               // async function send() {
-  //               //   await zyn.sendMessage(
-  //               //     id,
-  //               //     {
-  //               //       audio: { url: fileName },
-  //               //       mimetype: "audio/mp4",
-  //               //       contextInfo: {
-  //               //         externalAdReply: {
-  //               //           title: videoTitle,
-  //               //           body: botName,
-  //               //           thumbnailUrl: r,
-  //               //           mediaType: 1,
-  //               //           showAdAttribution: true,
-  //               //           renderLargerThumbnail: false,
-  //               //           sourceUrl: res.videoDetails.video_url,
-  //               //         },
-  //               //       },
-  //               //     },
-  //               //     { quoted: q }
-  //               //   );
-  //               // }
-  //               // send();
-
-  //           });
-  //         });
-  //       } catch (err) {
-  //         reply("*An Error Occured!*\n" + `_*${err}*_`);
-  //       }
-  //     }
-  //   }
-
-  //   if (body.startsWith(prefix + "video")) {
-  //     read(), type(), react("🎦");
-
-  //     const query = body.slice(6);
-
-  //     if (!query || body.includes("https://youtube.com/watch?v=")) {
-  //       errorMsg("Need a Query!", "video", "Query");
-  //     } else {
-  //       try {
-  //         yts(query).then((res) => {
-  //           const videos = res.videos.slice(0, 3);
-  //           const url = videos[0].url;
-
-  //           ytdl.getInfo(url).then((res) => {
-  //             const videoTitle = res.videoDetails.title;
-
-  //             reply("_*Downloading...*_\n" + "_" + videoTitle + "_");
-
-  //             const videoStream = ytdl(url, { quality: "18" });
-  //             const videoFileName = "./Zynt3x.mp4";
-  //             videoStream.pipe(fs.createWriteStream(videoFileName));
-
-  //             videoStream.on("finish", () => {
-  //               async function send() {
-  //                 await zyn.sendMessage(
-  //                   id,
-  //                   {
-  //                     video: { url: videoFileName },
-  //                     mimetype: "video/mp4",
-  //                     caption: "```" + videoTitle + "```",
-  //                   },
-  //                   { quoted: q }
-  //                 );
-  //               }
-  //               send();
-  //             });
-  //           });
-  //         });
-  //       } catch (err) {
-  //         reply("*An Error Occured!*\n" + `_*${err}*_`);
-  //       }
-  //     }
-  //   }
-
-  //   if (body.startsWith(prefix + "ai")) {
-  //     read(), type(), react("🪄");
-  //     let query = body.slice(3);
-
-  //     if (!query) {
-  //       errorMsg("Need a Query!", ".ai", "Query");
-  //     } else {
-  //       reply("*Generating...*  🔄");
-  //       try {
-  //         const genAI = new GoogleGenerativeAI(
-  //           "AIzaSyBd4SAi5JADrlqYS0m4gvWMlWSiSVD2Wyg"
-  //         );
-
-  //         async function run() {
-  //           const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-  //           const result = await model.generateContent(query);
-  //           const response = await result.response;
-  //           const text = response.text();
-  //           reply(text);
-  //         }
-
-  //         run();
-  //       } catch (err) {
-  //         reply("*An Error Occured!*\n" + `_*${err}*_`);
-  //       }
-  //     }
-  //   }
-
-  //   if (body.startsWith(prefix + "error")) {
-  //     read(), type(), react("🧰");
-  //     const query = body.slice("6");
-  //     if (!query) {
-  //       errorMsg("Need a Query!", "error", "Query");
-  //     } else {
-  //       let bot = zyn.user.id;
-  //       let date = new Date().getDate();
-  //       let month = new Date().getMonth();
-  //       let year = new Date().getFullYear();
-  //       let h = new Date().getHours();
-  //       let m = new Date().getMinutes();
-  //       let s = new Date().getSeconds();
-  //       const i = `${bot} , ${date}/${month}/${year} , ${h};${m};${s}`;
-  //       const msg = `*Error[${i}]:* ` + "```" + query + "```";
-
-  //       zyn
-  //         .sendMessage("916282888139@s.whatsapp.net", { text: msg })
-  //         .then(
-  //           reply(
-  //             "*Thank you for describing your error!* \n*Your error has been sent to admin.*"
-  //           )
-  //         );
-  //     }
-  //   }
-
+  
   //   if (body === prefix + "technews") {
   //     read(), type(), react("📰");
   //     async function randomTechNews() {
