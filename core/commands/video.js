@@ -8,8 +8,7 @@ newCommand("video", async (zyn, id, userName, args, ctx) => {
   await ctx.react("🎦");
 
   if (!args[0] || args[0].includes("https://youtube.com/watch?v=")) {
-    ctx.errorMsg("Need a Query!", "video", "Query");
-    return
+    return ctx.errorMsg("Need a Query!", "video", "Query");
   }
   try{
     yts(args[0]).then( async(res) => {

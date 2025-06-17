@@ -7,10 +7,10 @@ newCommand("ping", async (zyn, id, userName, args, ctx) => {
   await ctx.react("📍");
 
   try{
-    const start = performance.now()
-    await fetch("www.google.com")
-    const end = performance.now()
-    await ctx.reply(```Pong ${end-start}ms```)
+    const start = Date.now()
+    await fetch("https://www.google.com")
+    const end = Date.now()
+    await ctx.reply('```' + `Pong ${end-start}ms` + '```')
   }catch(err){
     await ctx.reply(err)
   }

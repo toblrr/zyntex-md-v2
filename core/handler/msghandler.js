@@ -1,8 +1,8 @@
 const { getCommand } = require("./config");
 const { buildContext } = require("./utils");
-require("dotenv").config();
 
-const prefix = "."; // or dynamically load this if needed
+const prefix = process.env.BOT_PREFIX || '.'
+let botName = "𝙕𝙮𝙣𝙩3𝙭!"; 
 
 async function messageHandler(zyn, m) {
   const { messages } = m;
@@ -35,7 +35,7 @@ async function messageHandler(zyn, m) {
   const context = buildContext(zyn, q, id, prefix);
 
   try {
-    await commandObj.handler(zyn, id, pushName, args, context, m);
+    await commandObj.handler(zyn, id, pushName, args, context, m , botName , prefix);
   } catch (err) {
     console.error("❌ Command Error:", err);
     await zyn.sendMessage(

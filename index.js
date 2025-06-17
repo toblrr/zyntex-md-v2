@@ -82,7 +82,7 @@ async function zyntex() {
 
   const zyn = makeWASocket({
     logger: pino({ level: "silent" }),
-    printQRInTerminal: true,
+    printQRInTerminal: false,
     markOnlineOnConnect: false,
     auth: state,
   });
@@ -129,7 +129,7 @@ async function zyntex() {
             "Connection Replaced!, Another Session Opened, Please Close Current Session"
           )
         );
-        zyn.logout();
+        if (zyn?.user) await zyn.logout();
       } else if (reason === DisconnectReason.loggedOut) {
         console.log(
           c.red(
@@ -170,109 +170,6 @@ async function zyntex() {
     await messageHandler(zyn, m);
   });
 
-  //   if (body.startsWith(prefix + "ytv")) {
-  //     read(), type(), react("🎥");
-
-  //     const url = body.slice(4).trim();
-
-  //     if (!url) {
-  //       errorMsg("Give a Youtube video Url!", "ytv", "YouTube Video Url");
-  //     } else {
-  //       try {
-  //       } catch (err) {
-  //         reply("*An Error Occured!*\n" + `_*${err}*_`);
-  //       }
-  //     }
-  //   }
-
-  //   if (body.startsWith(prefix + "lyrics")) {
-  //     read(), type(), react("💎");
-  //     const lyricQuery = body.slice(8);
-
-  //     if (!lyricQuery) {
-  //       errorMsg("Need a Query!", "lyrics", "Song Name");
-  //     } else {
-  //       try {
-  //         lyrics(lyricQuery).then((res) => {
-  //           reply(
-  //             `*${res[0].author}-${res[0].title}*\n\n${res[0].lyrics} \n\n > ${botName} `
-  //           );
-  //           // sendImage(res[0].thumbnail , `*${res[0].author}-${res[0].title}*\n\n${res[0].lyrics} \n\n > ${botName} `)
-  //         });
-  //       } catch (e) {
-  //         reply("*An error occured!*" + e);
-  //       }
-  //     }
-  //   }
-
-  //   if (body.startsWith(prefix + "yta")) {
-  //     read(), type(), react("🎶");
-
-  //     const url = body.slice(4).trim();
-
-  //     if (!url) {
-  //       errorMsg("Need Youtube video Url!", "yta", "YouTube Video Url");
-  //     } else {
-  //       try {
-  //         ytdl.getInfo(url).then((res) => {
-  //           const videoTitle = res.videoDetails.title;
-  //           reply("_*Downloading...*_\n" + "_" + videoTitle + "_");
-
-  //           let stream = ytdl(url);
-  //           const fileName = "./Zynt3x.mp3";
-
-  //           stream.pipe(fs.createWriteStream(fileName));
-
-  //           stream.on("finish", () => {
-  //             sendAudio(fileName);
-  //             return 0;
-  //           });
-  //         });
-  //       } catch (err) {
-  //         reply("*An Error Occured!*\n" + `_*${err}*_`);
-  //       }
-  //     }
-  //   }
-
-
-  
-  //   if (body === prefix + "technews") {
-  //     read(), type(), react("📰");
-  //     async function randomTechNews() {
-  //       try {
-  //         const newsArray = await axios.get(
-  //           "https://fantox001-scrappy-api.vercel.app/technews/random"
-  //         );
-  //         const randomNews = newsArray.data;
-  //         const news = randomNews.news;
-  //         const thumb = randomNews.thumbnail;
-  //         const msg = `*${news}*`;
-  //         sendImage(thumb, msg);
-  //       } catch (err) {
-  //         reply("*An Error Occured!*\n" + `_*${err}*_`);
-  //       }
-  //     }
-
-  //     randomTechNews();
-  //   }
-
-  //   if (body.startsWith(prefix + "fb")) {
-  //     read(), type(), react("☄️");
-  //     const url = body.slice(3);
-  //     if (!url) {
-  //       errorMsg("Need a Facebook Url!", "fb", "Url");
-  //     } else {
-  //       try {
-  //         reply("_*Downloading...*_");
-  //         getFBInfo(url).then((res) => {
-  //           sendVideo(res.hd, botName);
-  //         });
-  //       } catch (err) {
-  //         reply("*An Error Occured!*\n" + `_*${err}*_`);
-  //       }
-  //     }
-  //   }
-
   //   if (body.startsWith(prefix + "yts")) {
   //     read(), type(), react("🍭");
   //     const query = body.slice(5);
@@ -302,138 +199,6 @@ async function zyntex() {
   //     }
   //   }
 
-  //   if (body.startsWith(prefix + "textpro")) {
-  //     read(), type(), react();
-  //     const q = body.slice(9);
-  //     if (!q || !q.includes(",") || !q.includes("https://textpro.me/")) {
-  //       reply(
-  //         `_*eg: ${prefix} textpro <Copied Url from below> , <Name>*_\n\n*Urls:* \n _1. https://textpro.me/create-3d-thunder-text-effects-online-1147.html_ \n _(3D thunder text effects)_ \n\n _2. https://textpro.me/create-a-gradient-text-shadow-effect-online-1141.html_ \n _(gradient text shadow)_ \n\n _3. https://textpro.me/create-realistic-3d-text-effect-frozen-winter-1099.html_ \n _(realistic 3D text effect frozen winter)_ \n\n _4. https://textpro.me/create-artistic-typography-online-1086.html_ \n _(artistic typography)_ \n\n _5. https://textpro.me/create-gradient-neon-light-text-effect-online-1085.html_ \n _(gradient neon light text)_ \n\n _6. https://textpro.me/create-light-glow-sliced-text-effect-online-1068.html_ \n _(light glow sliced text)_ \n\n _7. https://textpro.me/make-a-batman-logo-online-free-1066.html_ \n _(bataman logo)_ \n\n _8. https://textpro.me/create-green-horror-style-text-effect-online-1036.html_ \n _(green horror style text effect)_ \n\n _9. https://textpro.me/create-harry-potter-text-effect-online-1025.html_ \n _(harry potter text effect)_ \n\n _10. https://textpro.me/matrix-style-text-effect-online-884.html_ \n _(matrix style text effect)_ \n\n _11. https://textpro.me/create-blackpink-logo-style-online-1001.html_ \n _(blackpink logo style)_`
-  //       );
-  //     } else {
-  //       try {
-  //         const query = q.split(",");
-  //         const url = query[0];
-  //         const name = query[1];
-  //         mumaker.textpro(url, name).then((res) => {
-  //           sendImage(res.image, `_Generated by ${botName}_`);
-  //         });
-  //       } catch (err) {
-  //         reply("*An Error Occured!*\n" + `_*${err}*_`);
-  //       }
-  //     }
-  //   }
-
-  //   // if(body ===  prefix + "menu" || body === prefix + "list"){
-  //   //   read(), type() , react("📍")
-  //   //   sendImage("https://i.ibb.co/CzfPYJV/colton-orr-2020-4.jpg" ,
-  //   //   `
-  //   //   ━━【ＭＥＮＵ】━━
-  //   //   \n\n\n▸ *${prefix}alive* _(To check wheather the bot is working or not)_
-  //   //   \n\n▸ *${prefix}menu/list* _(For full commands and uses)_
-  //   //   \n\n▸ *${prefix}quote* _(Generates a random quote with author)_
-  //   //   \n\n▸ *${prefix}ping* _(Pings the server)_
-  //   //   \n\n▸ *${prefix}song* _(Downloads song from youtube by query)_
-  //   //   \n\n▸ *${prefix}video* _(Downloads video from youtube by query)_
-  //   //   \n\n▸ *${prefix}yta* _(Downloads song from youtube by link)_
-  //   //   \n\n▸ *${prefix}ytv* _(Downloads video from youtube by link)_
-  //   //   \n\n▸ *${prefix}yts* _(Searches youtube by query or link)_
-  //   //   \n\n▸ *${prefix}lyrics* _(Gets you lyrics of popular songs)_
-  //   //   \n\n▸ *${prefix}fb* _(Downloads video from facebook)_
-  //   //   \n\n▸ *${prefix}ai* _(Helps you to chat with google gemini ai)_
-  //   //   \n\n▸ *${prefix}technews* _(Gets you a random tech news)_
-  //   //   \n\n▸ *${prefix}error* _(Describe errors to developer while using this bot)_
-  //   //   \n\n▸ *${prefix}textpro* _(Adds stylish texts to stylish backgrounds)_
-  //   //   \n\n▸ *${prefix}weather* _(Gets Weather Informations)_
-  //   //   `
-  //   // )
-  //   // }
-
-  //   if (body.startsWith(prefix + "weather")) {
-  //     react("❄️"), read(), type();
-  //     const q = body.slice(9).trim();
-  //     if (!q) {
-  //       errorMsg("Need a Query!", "weather", "Query");
-  //     } else {
-  //       const u =
-  //         "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
-  //       const api = "cd04ae4cec5f1b747c75eae5b3103e9f";
-  //       const url = u + q + "&appid=" + api;
-
-  //       if (response.status === 404) {
-  //         reply("_*Can't find this location*_");
-  //       } else {
-  //         const data = response.json();
-  //         const w = data.weather[0].main;
-  //         let r = data.weather[0].icon;
-  //         const icon =
-  //           `https://openweathermap.org/img/wn/` + `${r}` + `@2x.png`;
-  //         sendImage(
-  //           icon,
-  //           `_*Results For ${data.name},${data.sys.country}*_ \n\n *Temperature: ${data.main.temp}°C* \n *Humidity: ${data.main.humidity}* \n *Pressure: ${data.main.pressure}Pa* \n *Wind Speed: ${data.wind.speed}km/h*`
-  //         );
-  //       }
-  //     }
-  //   }
-
-  //   if (body.startsWith(prefix + "img")) {
-  //     react("🪄"), type(), read();
-  //     const q = body.slice(5);
-  //     if (!q) {
-  //       errorMsg("Need a Query!", "img", "Query");
-  //     } else {
-  //       reply("*Generating...*  🔄");
-  //       sendImage(
-  //         `https://image.pollinations.ai/prompt/${q}?nologo=1`,
-  //         `> Made with ❤️ by ${botName}`
-  //       );
-  //     }
-  //   }
-
-  //   if (body === prefix + "news") {
-  //     react("📰"), type(), read();
-  //     newsScrape().then((res) => {
-  //       sendImage(
-  //         res[0].thumbnail,
-  //         `*${res[0].headNews}* \n__________________\n\n1) ${res[2].title}\n2) ${res[3].title}\n3) ${res[4].title}\n4) ${res[5].title}\n5) ${res[6].title}`
-  //       );
-  //     });
-  //   }
-
-  //   if (body === prefix + "footballnews") {
-  //     react("⚽"), type(), read();
-  //     footballNewsScrape().then((res) => {
-  //       sendImage(
-  //         res[0].thumbnail,
-  //         `*${res[0].headNews}* \n__________________\n\n1) ${res[2].title}\n2) ${res[3].title}\n3) ${res[4].title}\n4) ${res[5].title}\n5) ${res[6].title}`
-  //       );
-  //     });
-  //   }
-  //   if (body.startsWith(prefix + "ig")) {
-  //     react("❄️"), read(), type();
-  //     const url = body.slice(3).trim();
-  //     if (!url || !body.includes("www.instagram.com")) {
-  //       errorMsg("Need a Instagram Url!", "ig", "url");
-  //     } else {
-  //       try {
-  //         if (url.includes("reel")) {
-  //           instadl(url).then((res) => {
-  //             sendVideo(res[0].download_url, `> Made with ❤️ by ${botName}`);
-  //           });
-  //         } else {
-  //           instadl(url).then((res) => {
-  //             res.forEach((element) => {
-  //               sendImage(element.download_url, `> Made with ❤️ by ${botName}`);
-  //             });
-  //             // console.log(i)
-  //             // sendImage(res[i].download_url , `Made with ❤️ by ${botName}` )
-  //           });
-  //         }
-  //       } catch (e) {
-  //         reply("*An error occured!*" + e);
-  //       }
-  //     }
-  //   }
-  // });
 
   zyn.ev.on("creds.update", saveCreds);
 }
