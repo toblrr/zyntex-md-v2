@@ -10,8 +10,8 @@ newCommand("ping", async (zyn, id, userName, args, ctx) => {
     const start = performance.now()
     await fetch("www.google.com")
     const end = performance.now()
-    return await ctx.reply(```Pong ${end-start}ms```)
+    await ctx.reply(```Pong ${end-start}ms```)
   }catch(err){
-    return await ctx.reply(err)
+    await ctx.reply(err)
   }
 },{description: "Pings the server."})
