@@ -1,3 +1,4 @@
 core/scraper/
 yarn.lock
 .vscode/
+session/
